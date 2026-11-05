@@ -1,6 +1,6 @@
 request_text,true_label,predicted_label,confidence
-Green waste bags split open and rubbish has scattered on footpath.,waste,waste,0.383371673093004
-Graffiti on community centre wall has offensive wording.,safety,waste,0.2875089781177812
-Bus shelter glass panel cracked and dangerous.,safety,safety,0.3502098494000332
-Deep crack forming on footpath beside the primary school.,road,waste,0.2717591071960867
-Overhanging branch above the footpath looks unsafe.,safety,safety,0.3541875211197496
+Green waste bags split open and rubbish has scattered on footpath.,waste,waste,0.3871847248404677
+Graffiti on community centre wall has offensive wording.,safety,waste,0.30246115317475103
+Bus shelter glass panel cracked and dangerous.,safety,safety,0.3499990601382854
+Deep crack forming on footpath beside the primary school.,road,water,0.2717780125893071
+Overhanging branch above the footpath looks unsafe.,safety,safety,0.3531325039978881

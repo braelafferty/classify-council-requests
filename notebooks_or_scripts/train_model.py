@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, classification_report
 import joblib
 from pathlib import Path
@@ -33,7 +33,7 @@ X_test_tfidf = vectoriser.transform(X_test)
 # print("Testing feature table:", X_test_tfidf.shape)
 
 
-model = LogisticRegression(max_iter=1000, random_state=42)
+model = MultinomialNB()
 model.fit(X_train_tfidf, y_train)
 
 predictions = model.predict(X_test_tfidf)
