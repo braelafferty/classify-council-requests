@@ -1,0 +1,35 @@
+$ pytest -v
+============================= test session starts =============================
+collecting ... collected 29 items
+
+tests/test_api.py::test_T01_health PASSED                                [  3%]
+tests/test_api.py::test_T02_categories PASSED                            [  6%]
+tests/test_api.py::test_valid_request[T03] PASSED                        [ 10%]
+tests/test_api.py::test_valid_request[T04] PASSED                        [ 13%]
+tests/test_api.py::test_valid_request[T05] PASSED                        [ 17%]
+tests/test_api.py::test_valid_request[T06] PASSED                        [ 20%]
+tests/test_api.py::test_valid_request[T07] PASSED                        [ 24%]
+tests/test_api.py::test_invalid_request_returns_400[T08] PASSED          [ 27%]
+tests/test_api.py::test_invalid_request_returns_400[T09] PASSED          [ 31%]
+tests/test_api.py::test_invalid_request_returns_400[T10] PASSED          [ 34%]
+tests/test_api.py::test_invalid_request_returns_400[T12] PASSED          [ 37%]
+tests/test_api.py::test_invalid_request_returns_400[T13] PASSED          [ 41%]
+tests/test_api.py::test_invalid_request_returns_400[T14] PASSED          [ 44%]
+tests/test_api.py::test_invalid_request_returns_400[T16] PASSED          [ 48%]
+tests/test_api.py::test_T11_malformed_json PASSED                        [ 51%]
+tests/test_api.py::test_T19_missing_content_type PASSED                  [ 55%]
+tests/test_api.py::test_T15_messy_text_gets_same_result_as_clean_text PASSED [ 58%]
+tests/test_api.py::test_T17_te_reo_maori_keeps_macrons_and_is_flagged PASSED [ 62%]
+tests/test_api.py::test_T18_out_of_scope_text_is_flagged PASSED          [ 65%]
+tests/test_api.py::test_T20_wrong_method_returns_json_405 PASSED         [ 68%]
+tests/test_api.py::test_T21_unknown_route_returns_json_404 PASSED        [ 72%]
+tests/test_api.py::test_T22_text_at_length_limit_is_accepted PASSED      [ 75%]
+tests/test_model.py::test_cleaned_data_has_no_duplicates_or_missing_text PASSED [ 79%]
+tests/test_model.py::test_split_is_80_20_and_stratified PASSED           [ 82%]
+tests/test_model.py::test_no_request_appears_in_both_train_and_test PASSED [ 86%]
+tests/test_model.py::test_api_cleaning_matches_pipeline_cleaning PASSED  [ 89%]
+tests/test_model.py::test_vectoriser_was_fitted_on_training_data_only PASSED [ 93%]
+tests/test_model.py::test_saved_model_reproduces_reported_accuracy PASSED [ 96%]
+tests/test_model.py::test_confidence_is_a_probability_that_sums_to_one PASSED [100%]
+
+============================= 29 passed in 0.34s ==============================
