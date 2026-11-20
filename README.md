@@ -22,7 +22,7 @@ python3 -m pip install -r requirements.txt
 |---|---|---|
 | GET | `/health` | Check that the API is running |
 | GET | `/categories` | List the model’s categories |
-| POST | `/predict` | Predict a category and return confidence |
+| POST | `/predict` | Predict a category and return confidence + wether it needs a human review or not |
 
 ## Usage
 
