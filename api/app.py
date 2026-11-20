@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from flask import Flask, request 
+from flask import Flask, request, send_from_directory
 import joblib
 app = Flask(__name__)
 
@@ -61,5 +61,36 @@ def predict():
         "confidence": float(confidence[0]),
         "needs_review": needs_review
     }
+
+
+# Swagger page at /docs so the endpoints can be tested in the browser.
+# The page loads Swagger UI from the internet and reads the endpoint list from openapi.json.
+SWAGGER_PAGE = """<!DOCTYPE html>
+<html>
+<head>
+  <title>Council Service Request Classifier API</title>
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+  <script>
+    SwaggerUIBundle({ url: "/openapi.json", dom_id: "#swagger-ui" });
+  </script>
+</body>
+</html>"""
+
+
+@app.route("/docs", methods=["GET"])
+def docs():
+    return SWAGGER_PAGE
+
+
+# openapi.json describes each endpoint and gives example inputs for Swagger
+@app.route("/openapi.json", methods=["GET"])
+def openapi_spec():
+    return send_from_directory(Path(__file__).parent, "openapi.json")
+
+
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,108 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Council Service Request Classifier API",
+    "version": "1.0",
+    "description": "Predicts the category of a council service request (road, safety, waste or water) with a confidence score. Predictions with confidence below 0.50 come back with needs_review set to true so a staff member can check them."
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Check the API is running",
+        "responses": {
+          "200": {
+            "description": "The API is running",
+            "content": {
+              "application/json": {
+                "example": {"status": "ok"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "summary": "List the categories the model can predict",
+        "responses": {
+          "200": {
+            "description": "The four categories",
+            "content": {
+              "application/json": {
+                "example": {"categories": ["road", "safety", "waste", "water"]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/predict": {
+      "post": {
+        "summary": "Predict the category of a service request",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "request_text": {"type": "string"}
+                },
+                "required": ["request_text"]
+              },
+              "examples": {
+                "road": {
+                  "summary": "Valid: pothole (road)",
+                  "value": {"request_text": "Large pothole on Colombo Street damaging cars"}
+                },
+                "waste": {
+                  "summary": "Valid: missed rubbish (waste)",
+                  "value": {"request_text": "Missed rubbish collection outside my house"}
+                },
+                "te_reo": {
+                  "summary": "Edge: te reo Māori request (flagged for review)",
+                  "value": {"request_text": "Kua pakaru te paipa wai i te huarahi i Ōtautahi"}
+                },
+                "off_topic": {
+                  "summary": "Edge: off-topic question (flagged for review)",
+                  "value": {"request_text": "What time does the library open on Sunday?"}
+                },
+                "empty": {
+                  "summary": "Invalid: empty text (400)",
+                  "value": {"request_text": ""}
+                },
+                "missing": {
+                  "summary": "Invalid: request_text missing (400)",
+                  "value": {}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The predicted category and confidence",
+            "content": {
+              "application/json": {
+                "example": {
+                  "request_text": "large pothole on colombo street damaging cars",
+                  "predicted_category": "road",
+                  "confidence": 0.625,
+                  "needs_review": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The input was not valid",
+            "content": {
+              "application/json": {
+                "example": {"error": "request_text must contain some text."}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
