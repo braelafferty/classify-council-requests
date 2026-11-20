@@ -1,12 +1,21 @@
 # Flask API 
 
+from pathlib import Path
+
 from flask import Flask, request 
 import joblib
 app = Flask(__name__)
 
+# Find the model folder from where this file is, so the API runs from any folder
+MODEL_FOLDER = Path(__file__).parent.parent / "model"
+
 # Load model and vectoriser 
-model = joblib.load("../model/model.joblib")
-vectoriser = joblib.load("../model/vectoriser.joblib")
+model = joblib.load(MODEL_FOLDER / "model.joblib")
+vectoriser = joblib.load(MODEL_FOLDER / "vectoriser.joblib")
+
+# Predictions below this confidence are flagged for a staff member to check.
+# On the test set this caught 2 of the 3 wrong predictions.
+REVIEW_THRESHOLD = 0.50
 
 # /Health route to show the app is working
 @app.route("/health", methods=["GET"])
@@ -43,11 +52,14 @@ def predict():
     predictions = model.predict(features)
     probabilities = model.predict_proba(features)
     confidence = probabilities.max(axis=1)
+    # True if the model is unsure, so a staff member should check the category
+    needs_review = bool(confidence[0] < REVIEW_THRESHOLD)
     # Returns back to user 
     return {
         "request_text": text,
         "predicted_category": str(predictions[0]),
-        "confidence": float(confidence[0])
+        "confidence": float(confidence[0]),
+        "needs_review": needs_review
     }
 if __name__ == "__main__":
     app.run(debug=True)
