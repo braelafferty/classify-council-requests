@@ -1,6 +1,8 @@
+
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.svm import LinearSVC
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.metrics import accuracy_score, classification_report
 import joblib
 from pathlib import Path
@@ -16,29 +18,20 @@ y_train = train_data["category"]
 X_test = test_data["cleaned_text"]
 y_test = test_data["category"]
 
-# print("Training requests:", len(X_train))
-# print("Testing requests:", len(X_test))
 
-# print("Example training text:")
-# print(X_train.head())
-
-# print("Correct categories:")
-# print(y_train.head())
-
-vectoriser = TfidfVectorizer()
+vectoriser = TfidfVectorizer(ngram_range=(1, 1))
 X_train_tfidf = vectoriser.fit_transform(X_train)
 X_test_tfidf = vectoriser.transform(X_test)
 
-# print("\nTraining feature table:", X_train_tfidf.shape)
-# print("Testing feature table:", X_test_tfidf.shape)
 
-
-model = MultinomialNB()
+model = CalibratedClassifierCV(LinearSVC(C=0.1, random_state=42), cv=3)
 model.fit(X_train_tfidf, y_train)
 
 predictions = model.predict(X_test_tfidf)
 accuracy = accuracy_score(y_test, predictions)
 
+print("\nModel: Calibrated LinearSVC (C=0.1)")
+print("TF-IDF: Unigrams")
 print("\nAccuracy:", accuracy)
 print("\nClassification report:")
 print(classification_report(y_test, predictions, zero_division=0))
@@ -57,10 +50,12 @@ results = pd.DataFrame({
 print("\nFive example predictions:")
 print(results.head(5).to_string(index=False))
 
+print("\nMean confidence on test set:", round(confidence.mean(), 3))
+
 Path("../model").mkdir(parents=True, exist_ok=True)
 Path("../outputs").mkdir(parents=True, exist_ok=True)
 
-# Save model 
+# Save model
 joblib.dump(model, "../model/model.joblib")
 joblib.dump(vectoriser, "../model/vectoriser.joblib")
 
@@ -71,4 +66,4 @@ results.head(5).to_csv(
     index=False
 )
 
-print('\nPredictions saved to ../outputs/*')
+print("\nPredictions saved to ../outputs/*")
